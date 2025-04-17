@@ -3,13 +3,15 @@ import { Link } from "react-router-dom";
 import { productContext } from "../App";
 
 const Home = ({ products }) => {
-  const { handleAddToCart } = useContext(productContext);
+  const { handleAddToCart, cart } = useContext(productContext);
+  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
 
   return (
     <div>
       <h1>All Products</h1>
-      <Link to="/AddCart">Go to Cart</Link>
-      <div className="product-list">
+      <Link to="/AddCart">Cart ({totalItems}) 👜</Link>
+    <div className="product-list">
         {products.map((item) => (
           <ul key={item.id} className="product-item">
             <li>

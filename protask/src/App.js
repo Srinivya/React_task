@@ -19,7 +19,46 @@ function App() {
   }, []);
 
   const handleAddToCart = (product) => {
-    setCart(cart.concat(product));
+    setCart((prevCart) => {
+      const updatedCart = [];
+      let found = false;
+
+      for (let i = 0; i < prevCart.length; i++) {
+        const oldItem = prevCart[i];
+
+        const newItem = {
+          id: oldItem.id,
+          title: oldItem.title,
+          price: oldItem.price,
+          image: oldItem.image,
+          quantity: oldItem.quantity,
+          totalPrice: oldItem.totalPrice,
+        };
+
+       
+        if (oldItem.id === product.id) {
+          newItem.quantity += 1;
+          newItem.totalPrice += newItem.price;
+          found = true;
+        }
+
+        updatedCart.push(newItem);
+      }
+
+
+      if (!found) {
+        updatedCart.push({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.image,
+          quantity: 1,
+          totalPrice: product.price,
+        });
+      }
+
+      return updatedCart;
+    });
   };
 
   return (
@@ -28,9 +67,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navigate to="/login" replace />} />
-
             <Route path="/login" element={<Login />} />
-
             <Route
               path="/home"
               element={
@@ -39,7 +76,6 @@ function App() {
                 </ProtectiveRouter>
               }
             />
-
             <Route
               path="/AddCart"
               element={
